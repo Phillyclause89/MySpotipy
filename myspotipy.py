@@ -95,7 +95,6 @@ class Main:
                               "album_type",
                               "release_date",
                               "total_tracks",
-                              "total_tracks",
                               "disc_number",
                               "duration_ms",
                               "explicit",
