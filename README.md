@@ -1,6 +1,1 @@
-I'm a big fan of actually owning music, but switched to Spotify a few years ago.
-If Spotify were to lose my information (unlikely) I would be devastated. I have found
-a lot fo music in the past few years and even switching from downloaded music to spotify
-made me lose songs. Currently, the only script in here downloads the title and artist of
-every song in your library and saves it in CSV format. For those proficient at coding,
-I'm sure you could find some uses for this script...
+I learned about the Spotipy lib from [this reddit post](https://www.reddit.com/r/learnpython/comments/dtyt2t/help_me_understand_this_spotipy_code/) by [u/The_Mann_In_Black](https://github.com/TheMannInBlack). 
