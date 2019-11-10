@@ -46,8 +46,6 @@ class MySpotipy:
             results = self.sp.current_user_saved_tracks(limit=50, offset=off)
             off += 50
             for item in results['items']:
-                print(item)
-
                 row = [item['track']['name'], item['track']['artists'][0]['name']]
                 if "album" in kwargs:
                     row.append(item['track']['album']['name'])
@@ -59,7 +57,7 @@ class MySpotipy:
                 i += 1
             if results["next"] is None:
                 break
-        df.to_csv('Finally.csv')
+        df.to_csv('MySpotipyLikedSongs.csv')
 
     def update_token(self, update=True, **kwargs):
         if "username" in kwargs:
