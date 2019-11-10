@@ -29,16 +29,25 @@ class MySpotipy:
             return t
         raise Exception("Failed to get token")
 
-    def liked_songs_to_csv(self, **kwargs):
+    def liked_songs_to_csv(self, *args):
         from pandas import DataFrame as pdDF
-        columns = ['Title', 'Artists']
-        if "album" in kwargs:
-            columns.append("Album")
-        if "album_type" in kwargs:
-            columns.append("Album Type")
-        if "album_type" in kwargs:
-            columns.append("Album Type")
-
+        columns = ['title', 'artist(s)']
+        keys = {"added_at": "item['added_at']",
+                "album": "item['track']['album']['album_type']",
+                "album_type": "item['track']['album']['album_type']",
+                "release_date": "item['track']['album']['release_date']",
+                "total_tracks": "item['track']['album']['total_tracks']",
+                "disc_number": "item['track']['disc_number']",
+                "duration_ms": "item['track']['duration_ms']",
+                "explicit": "item['track']['explicit']",
+                "popularity": "item['track']['popularity']",
+                "track_number": "item['track']['track_number']",
+                "id": "item['track']['id']",
+                "is_local": "item['track']['is_local']"
+                }
+        for kw in args:
+            if kw.lower() in keys:
+                columns.append(kw)
         df = pdDF(columns=columns)
         off = 0
         i = 0
@@ -47,12 +56,9 @@ class MySpotipy:
             off += 50
             for item in results['items']:
                 row = [item['track']['name'], item['track']['artists'][0]['name']]
-                if "album" in kwargs:
-                    row.append(item['track']['album']['name'])
-                if "album_type" in kwargs:
-                    row.append(item['track']['album']['album_type'])
-                if "album_type" in kwargs:
-                    row.append(item['track']['album']['album_type'])
+                if len(columns) > 2:
+                    for kw in columns[2:]:
+                        row.append(eval(keys[kw]))
                 df.loc[i] = row
                 i += 1
             if results["next"] is None:
@@ -84,7 +90,20 @@ class Main:
                        self.creds["Client_id"],
                        self.creds["Client_secret"],
                        self.creds["Redirect_uri"])
-        ms.liked_songs_to_csv()
+        ms.liked_songs_to_csv("album",
+                              "added_at",
+                              "album_type",
+                              "release_date",
+                              "total_tracks",
+                              "total_tracks",
+                              "disc_number",
+                              "duration_ms",
+                              "explicit",
+                              "popularity",
+                              "track_number",
+                              "external_urls",
+                              "id",
+                              "is_local")
         print("done")
 
     def load_spoty_creds(self):
