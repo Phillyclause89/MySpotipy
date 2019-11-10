@@ -71,9 +71,10 @@ class MySpotipy:
 
 
 if __name__ == '__main__':
-    ms = MySpotipy("PhilSpoter",
-                   'user-library-read',
-                   '39b61945ac3644c290db7651ca7f9beb',
-                   'f224f1c2ed174b0ebf7307cee3747157')
+    creds = []
+    with open('C:\Users\Philip\AppData\Roaming\MySpotipyData\MySpotipyCreds.txt', 'r') as f:
+        for line in f:
+            creds.append(line)
+    ms = MySpotipy(creds[0], creds[1], creds[2], creds[3])
     ms.liked_songs_to_csv()
     print("done")
