@@ -71,9 +71,9 @@ class MySpotipy:
 
 
 if __name__ == '__main__':
-    ms = MySpotipy("PhilSpoter",
+    ms = MySpotipy("",
                    'user-library-read',
-                   '39b61945ac3644c290db7651ca7f9beb',
-                   'f224f1c2ed174b0ebf7307cee3747157')
+                   '',
+                   '')
     ms.liked_songs_to_csv()
     print("done")
