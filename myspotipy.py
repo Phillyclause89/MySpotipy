@@ -3,7 +3,12 @@ import spotipy.util as util
 
 
 class MySpotipy:
-    def __init__(self, username, scope, client_id, client_secret, redirect_uri='http://localhost:8888/callback/'):
+    def __init__(self,
+                 username,
+                 scope,
+                 client_id,
+                 client_secret,
+                 redirect_uri='http://localhost:8888/callback/'):
         self.username = username
         self.scope = scope
         self.client_id = client_id
@@ -27,11 +32,11 @@ class MySpotipy:
     def liked_songs_to_csv(self, **kwargs):
         from pandas import DataFrame as pdDF
         columns = ['Title', 'Artists']
-        if kwargs["album"]:
+        if "album" in kwargs:
             columns.append("Album")
-        if kwargs["album_type"]:
+        if "album_type" in kwargs:
             columns.append("Album Type")
-        if kwargs["album_type"]:
+        if "album_type" in kwargs:
             columns.append("Album Type")
 
         df = pdDF(columns=columns)
@@ -41,12 +46,14 @@ class MySpotipy:
             results = self.sp.current_user_saved_tracks(limit=50, offset=off)
             off += 50
             for item in results['items']:
+                print(item)
+
                 row = [item['track']['name'], item['track']['artists'][0]['name']]
-                if kwargs["album"]:
+                if "album" in kwargs:
                     row.append(item['track']['album']['name'])
-                if kwargs["album_type"]:
+                if "album_type" in kwargs:
                     row.append(item['track']['album']['album_type'])
-                if kwargs["album_type"]:
+                if "album_type" in kwargs:
                     row.append(item['track']['album']['album_type'])
                 df.loc[i] = row
                 i += 1
@@ -70,11 +77,34 @@ class MySpotipy:
             self.sp = spotipy.Spotify(auth=self.token)
 
 
+class Main:
+    def __init__(self):
+        self.creds = {}
+        self.load_spoty_creds()
+        ms = MySpotipy(self.creds["Username"],
+                       self.creds["Scope"],
+                       self.creds["Client_id"],
+                       self.creds["Client_secret"],
+                       self.creds["Redirect_uri"])
+        ms.liked_songs_to_csv()
+        print("done")
+
+    def load_spoty_creds(self):
+        import pickle
+        try:
+            pickle_in = open(r'C:/Users/Philip/AppData/Roaming/MySpotipyData/MySpotipyCreds.pickle', "rb")
+            self.creds = pickle.load(pickle_in)
+            pickle_in.close()
+        except FileNotFoundError:
+            self.creds = {"Username": input("Enter your Spotify Username:\n"),
+                          "Scope": input("Enter your Spotify Scope:\n"),
+                          "Client_id": input("Enter your Spotify Client ID:\n"),
+                          "Client_secret": input("Enter your Client Secret:\n"),
+                          "Redirect_uri": input("Enter your Spotify Redirect URL:\n")}
+            pickle_out = open(r'C:/Users/Philip/AppData/Roaming/MySpotipyData/MySpotipyCreds.pickle', "wb")
+            pickle.dump(self.creds, pickle_out)
+            pickle_out.close()
+
+
 if __name__ == '__main__':
-    creds = []
-    with open('C:\Users\Philip\AppData\Roaming\MySpotipyData\MySpotipyCreds.txt', 'r') as f:
-        for line in f:
-            creds.append(line)
-    ms = MySpotipy(creds[0], creds[1], creds[2], creds[3])
-    ms.liked_songs_to_csv()
-    print("done")
+    Main()
