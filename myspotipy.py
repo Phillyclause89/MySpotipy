@@ -8,14 +8,16 @@ class MySpotipy:
                  scope,
                  client_id,
                  client_secret,
-                 redirect_uri='http://localhost:8888/callback/'):
+                 redirect_uri='http://localhost:8888/callback/',
+                 auto_connect=True):
         self.username = username
         self.scope = scope
         self.client_id = client_id
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
-        self.token = self.get_token()
-        self.sp = spotipy.Spotify(auth=self.token)
+        if auto_connect:
+            self.token = self.get_token()
+            self.sp = spotipy.Spotify(auth=self.token)
 
     def get_token(self):
         t = util.prompt_for_user_token(
@@ -82,35 +84,43 @@ class MySpotipy:
 
 
 class Main:
-    def __init__(self):
-        self.creds = {}
-        self.load_spoty_creds()
-        ms = MySpotipy(self.creds["Username"],
-                       self.creds["Scope"],
-                       self.creds["Client_id"],
-                       self.creds["Client_secret"],
-                       self.creds["Redirect_uri"])
-        ms.liked_songs_to_csv("album",
-                              "added_at",
-                              "album_type",
-                              "release_date",
-                              "total_tracks",
-                              "disc_number",
-                              "duration_ms",
-                              "explicit",
-                              "popularity",
-                              "track_number",
-                              "external_urls",
-                              "id",
-                              "is_local")
-        print("done")
+    def __init__(self, test=False):
+        if not test:
+            self.creds = {}
+            self.load_spoty_creds()
+            ms = MySpotipy(self.creds["Username"],
+                           self.creds["Scope"],
+                           self.creds["Client_id"],
+                           self.creds["Client_secret"],
+                           self.creds["Redirect_uri"])
+            ms.liked_songs_to_csv("album",
+                                  "added_at",
+                                  "album_type",
+                                  "release_date",
+                                  "total_tracks",
+                                  "disc_number",
+                                  "duration_ms",
+                                  "explicit",
+                                  "popularity",
+                                  "track_number",
+                                  "external_urls",
+                                  "id",
+                                  "is_local")
+            print("done")
+        else:
+            print("Test Init Complete")
 
-    def load_spoty_creds(self):
+    def load_spoty_creds(self, output=False):
         import pickle
         try:
             pickle_in = open(r'C:/Users/Philip/AppData/Roaming/MySpotipyData/MySpotipyCreds.pickle', "rb")
-            self.creds = pickle.load(pickle_in)
+            if not output:
+                self.creds = pickle.load(pickle_in)
+            else:
+                c = pickle.load(pickle_in)
             pickle_in.close()
+            if output:
+                return c
         except FileNotFoundError:
             self.creds = {"Username": input("Enter your Spotify Username:\n"),
                           "Scope": input("Enter your Spotify Scope:\n"),
