@@ -112,8 +112,11 @@ class Main:
 
     def load_spoty_creds(self, output=False):
         import pickle
+        import os
+        # \MySpotipyData folder needs to preexist. Must Fix!
+        path = os.getenv("LOCALAPPDATA") + "\MySpotipyData\MySpotipyCreds.pickle"
         try:
-            pickle_in = open(r'C:/Users/Philip/AppData/Roaming/MySpotipyData/MySpotipyCreds.pickle', "rb")
+            pickle_in = open(path, "rb")
             if not output:
                 self.creds = pickle.load(pickle_in)
             else:
@@ -127,7 +130,7 @@ class Main:
                           "Client_id": input("Enter your Spotify Client ID:\n"),
                           "Client_secret": input("Enter your Client Secret:\n"),
                           "Redirect_uri": input("Enter your Spotify Redirect URL:\n")}
-            pickle_out = open(r'C:/Users/Philip/AppData/Roaming/MySpotipyData/MySpotipyCreds.pickle', "wb")
+            pickle_out = open(path, "wb")
             pickle.dump(self.creds, pickle_out)
             pickle_out.close()
 

@@ -1,5 +1,5 @@
 
-.venv
+.venv/
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
@@ -35,3 +35,6 @@ fabric.properties
 .idea/workspace.xml
 .idea/**/workspace.xml
 .idea/workspace.xml
+venv/
+.venv/**
+venv/**
