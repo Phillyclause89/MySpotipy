@@ -54,3 +54,7 @@ venv/Include/**
 venv/Lib/**
 venv/Scripts/**
 venv/tcl/**
+venv/Lib/site-packages
+.venv/Lib/site-packages
+venv/Lib/site-packages/**
+.venv/Lib/site-packages/**
