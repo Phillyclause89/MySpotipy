@@ -34,18 +34,18 @@ class MySpotipy:
     def liked_songs_to_csv(self, *args):
         from pandas import DataFrame as pdDF
         columns = ['title', 'artist(s)']
-        keys = {"added_at": "item['added_at']",
-                "album": "item['track']['album']['album_type']",
-                "album_type": "item['track']['album']['album_type']",
-                "release_date": "item['track']['album']['release_date']",
-                "total_tracks": "item['track']['album']['total_tracks']",
-                "disc_number": "item['track']['disc_number']",
-                "duration_ms": "item['track']['duration_ms']",
-                "explicit": "item['track']['explicit']",
-                "popularity": "item['track']['popularity']",
-                "track_number": "item['track']['track_number']",
-                "id": "item['track']['id']",
-                "is_local": "item['track']['is_local']"
+        keys = {"added_at": lambda it: it['added_at'],
+                "album": lambda it: it['track']['album']['name'],
+                "album_type": lambda it: it['track']['album']['album_type'],
+                "release_date": lambda it: it['track']['album']['release_date'],
+                "total_tracks": lambda it: it['track']['album']['total_tracks'],
+                "disc_number": lambda it: it['track']['disc_number'],
+                "duration_ms": lambda it: it['track']['duration_ms'],
+                "explicit": lambda it: it['track']['explicit'],
+                "popularity": lambda it: it['track']['popularity'],
+                "track_number": lambda it: it['track']['track_number'],
+                "id": lambda it: it['track']['id'],
+                "is_local": lambda it: it['track']['is_local']
                 }
         for kw in args:
             if kw.lower() in keys:
@@ -60,7 +60,7 @@ class MySpotipy:
                 row = [item['track']['name'], item['track']['artists'][0]['name']]
                 if len(columns) > 2:
                     for kw in columns[2:]:
-                        row.append(eval(keys[kw]))
+                        row.append(keys[kw](item))
                 df.loc[i] = row
                 i += 1
             if results["next"] is None:
